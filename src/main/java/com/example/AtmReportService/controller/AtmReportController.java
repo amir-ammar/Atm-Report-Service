@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/demo")
+@RequestMapping("/api/v1/atm")
 @AllArgsConstructor
 @EnableCaching
 public class AtmReportController {
 
     @GetMapping("/dummy")
     public ResponseEntity<String> getDummy() {
-        System.out.println("This is a dummy endpoint");
-        return ResponseEntity.ok("This is a dummy endpoint");
+        System.out.println("This is a dummy endpoint v2");
+        return ResponseEntity.ok("This is a dummy endpoint v2");
     }
 }
