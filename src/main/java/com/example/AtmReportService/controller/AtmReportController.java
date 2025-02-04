@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/demo")
 @AllArgsConstructor
 @EnableCaching
-public class DemoController {
+public class AtmReportController {
 
     @GetMapping("/dummy")
     public ResponseEntity<String> getDummy() {
