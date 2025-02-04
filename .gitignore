@@ -1,0 +1,53 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.db
+*.sql
+
+# Build directories
+/target/
+/build/
+
+# Maven
+/.mvn/
+/mvnw
+/mvnw.cmd
+
+# Gradle
+/gradle/
+/gradlew
+/gradlew.bat
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ IDEA
+.idea/
+/*.iml
+
+# VSCode
+.vscode/
+
+# Docker
+.docker/
+docker-compose.yml
+
+# Logs
+*.log
+*.out
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Spring Boot application specific
+spring-boot-devtools.properties
