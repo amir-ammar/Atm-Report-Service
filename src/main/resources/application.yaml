@@ -1,5 +1,9 @@
 server:
   port: 8080
+
 spring:
   application:
     name: atm-report-service
+
+atm:
+  data-folder: "/Users/amirammar/Documents/GitHub/Atm-Report-Service/src/data"

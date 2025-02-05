@@ -1,0 +1,11 @@
+[
+  {
+    "transactionId": "12345",
+    "transactionDate": "2025-02-05T14:30:00",
+    "cardNumber": "1234-5678-9876-5432",
+    "transactionType": "DEPOSIT",
+    "amount": 150.75,
+    "destinationCardNumber": "",
+    "atmId": "C"
+  }
+]
