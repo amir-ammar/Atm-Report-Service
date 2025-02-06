@@ -25,6 +25,7 @@ public class AtmReportController {
 
     @GetMapping("/daily")
     public TransactionResponse getDailyTransactions(@RequestParam String date) {
+        System.out.println("Getting daily transactions for date: " + date);
         LocalDate localDate = LocalDate.parse(date);
         return transactionService.getTransactionsForDate(localDate);
     }
