@@ -6,4 +6,4 @@ spring:
     name: atm-report-service
 
 atm:
-  data-folder: "/Users/amirammar/Documents/GitHub/Atm-Report-Service/src/data"
+  data-folder: "${ATM_DATA_FOLDER:/Users/amirammar/Documents/GitHub/Atm-Report-Service/src/data}"
