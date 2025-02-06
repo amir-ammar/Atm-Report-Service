@@ -46,9 +46,4 @@ public class TransactionStore {
                 .getOrDefault(type, Collections.emptyList());
     }
 
-    public Map<String, Object> getSummaryForDate(LocalDate date) {
-        List<Transaction> transactions = getTransactionsForDate(date);
-        double totalAmount = transactions.stream().mapToDouble(Transaction::getAmount).sum();
-        return Map.of("count", transactions.size(), "totalAmount", totalAmount);
-    }
 }

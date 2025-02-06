@@ -1,45 +1,35 @@
 package com.example.AtmReportService.service;
 
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.AtmReportService.model.Transaction;
+import com.example.AtmReportService.model.TransactionResponse;
+import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class TransactionService {
-
     private final TransactionStore transactionStore;
 
-    @Autowired
     public TransactionService(TransactionStore transactionStore) {
         this.transactionStore = transactionStore;
     }
 
-    public List<Transaction> getTransactionsForDate(LocalDate date) {
-        return transactionStore.getTransactionsForDate(date);
+    public TransactionResponse getTransactionsForDate(LocalDate date) {
+        List<Transaction> transactions = transactionStore.getTransactionsForDate(date);
+        return new TransactionResponse(transactions.size(), calculateTotalAmount(transactions), transactions);
     }
 
-    public List<Transaction> getDailyTransactionsPerAtm(LocalDate date, String atmId) {
-        return transactionStore.getTransactionsForAtm(date, atmId);
+    public TransactionResponse getTransactionsForAtm(LocalDate date, String atmId) {
+        List<Transaction> transactions = transactionStore.getTransactionsForAtm(date, atmId);
+        return new TransactionResponse(transactions.size(), calculateTotalAmount(transactions), transactions);
     }
 
-    public List<Transaction> getDailyTransactionsPerType(LocalDate date, String transactionType) {
-        return transactionStore.getTransactionsForType(date, transactionType);
+    public TransactionResponse getTransactionsForType(LocalDate date, String type) {
+        List<Transaction> transactions = transactionStore.getTransactionsForType(date, type);
+        return new TransactionResponse(transactions.size(), calculateTotalAmount(transactions), transactions);
     }
 
-    public Map<String, Object> getTransactionSummary(LocalDate date) {
-        return transactionStore.getSummaryForDate(date);
+    private double calculateTotalAmount(List<Transaction> transactions) {
+        return transactions.stream().mapToDouble(Transaction::getAmount).sum();
     }
-
-    // public List<Transaction> getTransactionsByAtm(LocalDate date, String atmId) {
-    // return transactionStore.getTransactionsByAtm(date, atmId);
-    // }
-
-    // public List<Transaction> getTransactionsByType(LocalDate date, String
-    // transactionType) {
-    // return transactionStore.getTransactionsByType(date, transactionType);
-    // }
 }
