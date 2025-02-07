@@ -28,3 +28,20 @@ This ATM Report Service is designed to process transaction data from different A
 ```bash
 git clone https://github.com/yourusername/Atm-Report-Service.git
 cd Atm-Report-Service
+```
+
+## Suggested Dates and IDs for Testing
+
+To test the API endpoints, you can use the following sample data:
+
+- **Test Date**: `2025-02-05`
+- **ATM IDs**: `A`, `B`, `C`, `D`
+- **Transaction Types**: `WITHDRAW`, `DEPOSIT`, `BALANCE_TRANSFER`
+
+Use these values to generate transaction summaries through the API.
+
+## OpenAPI Documentation
+
+The OpenAPI documentation for this service is hosted at:
+
+http://18.205.154.180/swagger-ui/index.html
