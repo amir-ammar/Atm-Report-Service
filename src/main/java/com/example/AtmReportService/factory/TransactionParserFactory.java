@@ -7,7 +7,7 @@ public class TransactionParserFactory {
     public static TransactionParser getParser(String fileExtension) {
         AtmFileType atmType = AtmFileType.fromExtension(fileExtension);
         if (atmType == null) {
-            throw new IllegalArgumentException("Unknown file extension: " + fileExtension);
+            throw new IllegalArgumentException("No parser available for file type: " + fileExtension);
         }
 
         return switch (atmType) {

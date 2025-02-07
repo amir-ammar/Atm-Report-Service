@@ -1,17 +1,21 @@
 package com.example.AtmReportService.model;
 
 public class TransactionSummary {
-    private int totalTransactions;
-    private double totalAmount;
+    private final int totalTransactions;
+    private final double totalAmount;
 
     public TransactionSummary() {
         this.totalTransactions = 0;
         this.totalAmount = 0.0;
     }
 
-    public void addTransaction(double amount) {
-        this.totalTransactions++;
-        this.totalAmount += amount;
+    private TransactionSummary(int totalTransactions, double totalAmount) {
+        this.totalTransactions = totalTransactions;
+        this.totalAmount = totalAmount;
+    }
+
+    public TransactionSummary addTransaction(double amount) {
+        return new TransactionSummary(this.totalTransactions + 1, this.totalAmount + amount);
     }
 
     public int getTotalTransactions() {

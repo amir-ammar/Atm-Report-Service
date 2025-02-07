@@ -1,18 +1,18 @@
 package com.example.AtmReportService.controller;
 
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.web.bind.annotation.*;
 import com.example.AtmReportService.model.TransactionResponse;
 import com.example.AtmReportService.service.TransactionService;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/reports")
-@EnableCaching
-@RequiredArgsConstructor
 public class AtmReportController {
 
     private final TransactionService transactionService;
+
+    public AtmReportController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     @GetMapping("/daily")
     public TransactionResponse getDailySummary(@RequestParam String date) {
