@@ -4,8 +4,12 @@ import org.springframework.web.bind.annotation.*;
 import com.example.AtmReportService.model.TransactionResponse;
 import com.example.AtmReportService.service.TransactionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
-@RequestMapping("/api/v1/reports")
+@RequestMapping("/api/v1")
 public class AtmReportController {
 
     private final TransactionService transactionService;
@@ -14,17 +18,32 @@ public class AtmReportController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/daily")
+    @Operation(summary = "Get Daily Transaction Report")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved daily report"),
+            @ApiResponse(responseCode = "400", description = "Invalid date format")
+    })
+    @GetMapping("/reports/daily")
     public TransactionResponse getDailySummary(@RequestParam String date) {
         return transactionService.getDailySummary(TransactionService.parseDate(date));
     }
 
-    @GetMapping("/daily/atm")
+    @Operation(summary = "Get ATM Transaction Report")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved ATM report"),
+            @ApiResponse(responseCode = "400", description = "Invalid date format")
+    })
+    @GetMapping("/reports/daily/atm")
     public TransactionResponse getAtmSummary(@RequestParam String date, @RequestParam String atmId) {
         return transactionService.getAtmSummary(TransactionService.parseDate(date), atmId);
     }
 
-    @GetMapping("/daily/type")
+    @Operation(summary = "Get Type Transaction Report")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved type report"),
+            @ApiResponse(responseCode = "400", description = "Invalid date format")
+    })
+    @GetMapping("/reports/daily/type")
     public TransactionResponse getTypeSummary(@RequestParam String date, @RequestParam String type) {
         return transactionService.getTypeSummary(TransactionService.parseDate(date), type);
     }
