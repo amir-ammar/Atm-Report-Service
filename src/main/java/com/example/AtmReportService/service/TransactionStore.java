@@ -5,45 +5,45 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 import com.example.AtmReportService.model.Transaction;
+import com.example.AtmReportService.model.TransactionSummary;
 
 @Component
 public class TransactionStore {
-    private final Map<LocalDate, List<Transaction>> transactionsByDate = new ConcurrentHashMap<>();
-
-    private final Map<LocalDate, Map<String, List<Transaction>>> transactionsByAtm = new ConcurrentHashMap<>();
-
-    private final Map<LocalDate, Map<String, List<Transaction>>> transactionsByType = new ConcurrentHashMap<>();
+    private final Map<LocalDate, TransactionSummary> dailySummary = new ConcurrentHashMap<>();
+    private final Map<LocalDate, Map<String, TransactionSummary>> atmSummary = new ConcurrentHashMap<>();
+    private final Map<LocalDate, Map<String, TransactionSummary>> typeSummary = new ConcurrentHashMap<>();
 
     public void addTransactions(List<Transaction> transactions) {
         for (Transaction transaction : transactions) {
             LocalDate date = transaction.getTransactionDate().toLocalDate();
+            double amount = transaction.getAmount();
+            String atmId = transaction.getAtmId();
+            String type = transaction.getTransactionType().toString();
 
-            transactionsByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(transaction);
+            dailySummary.computeIfAbsent(date, k -> new TransactionSummary())
+                    .addTransaction(amount);
 
-            transactionsByAtm
-                    .computeIfAbsent(date, k -> new ConcurrentHashMap<>())
-                    .computeIfAbsent(transaction.getAtmId(), k -> new ArrayList<>())
-                    .add(transaction);
+            atmSummary.computeIfAbsent(date, k -> new ConcurrentHashMap<>())
+                    .computeIfAbsent(atmId, k -> new TransactionSummary())
+                    .addTransaction(amount);
 
-            transactionsByType
-                    .computeIfAbsent(date, k -> new ConcurrentHashMap<>())
-                    .computeIfAbsent(transaction.getTransactionType().toString(), k -> new ArrayList<>())
-                    .add(transaction);
+            typeSummary.computeIfAbsent(date, k -> new ConcurrentHashMap<>())
+                    .computeIfAbsent(type, k -> new TransactionSummary())
+                    .addTransaction(amount);
         }
     }
 
-    public List<Transaction> getTransactionsForDate(LocalDate date) {
-        return transactionsByDate.getOrDefault(date, Collections.emptyList());
+    public TransactionSummary getDailySummary(LocalDate date) {
+        return dailySummary.getOrDefault(date, new TransactionSummary());
     }
 
-    public List<Transaction> getTransactionsForAtm(LocalDate date, String atmId) {
-        return transactionsByAtm.getOrDefault(date, Collections.emptyMap())
-                .getOrDefault(atmId, Collections.emptyList());
+    public TransactionSummary getAtmSummary(LocalDate date, String atmId) {
+        return atmSummary.getOrDefault(date, Collections.emptyMap())
+                .getOrDefault(atmId, new TransactionSummary());
     }
 
-    public List<Transaction> getTransactionsForType(LocalDate date, String type) {
-        return transactionsByType.getOrDefault(date, Collections.emptyMap())
-                .getOrDefault(type, Collections.emptyList());
+    public TransactionSummary getTypeSummary(LocalDate date, String type) {
+        return typeSummary.getOrDefault(date, Collections.emptyMap())
+                .getOrDefault(type, new TransactionSummary());
     }
-
 }

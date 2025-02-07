@@ -10,10 +10,18 @@ import java.util.List;
 
 public class JsonTransactionParser implements TransactionParser {
 
+    private static final String ATM_ID = "C";
+
     @Override
     public List<Transaction> parse(File file) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(file, mapper.getTypeFactory().constructCollectionType(List.class, Transaction.class));
+
+        List<Transaction> transactions = mapper.readValue(
+                file, mapper.getTypeFactory().constructCollectionType(List.class, Transaction.class));
+
+        transactions.forEach(tx -> tx.setAtmId(ATM_ID));
+
+        return transactions;
     }
 }

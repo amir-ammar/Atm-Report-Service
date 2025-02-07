@@ -2,31 +2,42 @@ package com.example.AtmReportService.service.parser;
 
 import com.example.AtmReportService.model.Transaction;
 import com.example.AtmReportService.model.TransactionType;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 
 public class CsvTransactionParser implements TransactionParser {
+
+    private static final String ATM_ID = "B";
+
     @Override
     public List<Transaction> parse(File file) throws IOException {
         List<Transaction> transactions = new ArrayList<>();
-        try (CSVParser parser = new CSVParser(new FileReader(file), CSVFormat.DEFAULT.withHeader())) {
+
+        try (FileReader fileReader = new FileReader(file);
+                CSVParser parser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
             for (CSVRecord record : parser) {
-                Transaction transaction = new Transaction(
-                        record.get("transactionId"),
-                        LocalDateTime.parse(record.get("transactionDate")),
-                        record.get("cardNumber"),
-                        TransactionType.valueOf(record.get("transactionType")),
-                        Double.parseDouble(record.get("amount")),
-                        record.get("destinationCardNumber"),
-                        "B");
-                transactions.add(transaction);
+                try {
+                    Transaction transaction = new Transaction(
+                            record.get("transactionId"),
+                            LocalDateTime.parse(record.get("transactionDate")),
+                            record.get("cardNumber"),
+                            TransactionType.valueOf(record.get("transactionType")),
+                            Double.parseDouble(record.get("amount")),
+                            record.get("destinationCardNumber"),
+                            ATM_ID);
+                    transactions.add(transaction);
+                } catch (Exception e) {
+                    throw new IOException("Error parsing CSV record: " + record, e);
+                }
             }
         }
         return transactions;

@@ -12,13 +12,19 @@ import java.util.List;
 
 public class YamlTransactionParser implements TransactionParser {
 
+    private static final String ATM_ID = "D";
+
     @Override
     public List<Transaction> parse(File file) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         mapper.registerModule(new JavaTimeModule());
         try (FileReader reader = new FileReader(file)) {
-            return mapper.readValue(reader,
+            List<Transaction> transactions = mapper.readValue(reader,
                     mapper.getTypeFactory().constructCollectionType(List.class, Transaction.class));
+
+            transactions.forEach(tx -> tx.setAtmId(ATM_ID));
+
+            return transactions;
         }
     }
 }

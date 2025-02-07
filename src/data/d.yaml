@@ -4,7 +4,6 @@
   transactionType: "DEPOSIT"
   amount: 150.75
   destinationCardNumber: ""
-  atmId: "D"
 
 - transactionId: "12346"
   transactionDate: "2025-02-05T15:00:00"
@@ -12,4 +11,3 @@
   transactionType: "BALANCE_TRANSFER"
   amount: 500.00
   destinationCardNumber: "9876-5432-1234-5678"
-  atmId: "D"

@@ -13,13 +13,20 @@ import java.util.List;
 
 public class XmlTransactionParser implements TransactionParser {
 
+    private static final String ATM_ID = "A";
+
     @Override
     public List<Transaction> parse(File file) throws IOException {
         try {
             JAXBContext context = JAXBContext.newInstance(TransactionListWrapper.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             TransactionListWrapper wrapper = (TransactionListWrapper) unmarshaller.unmarshal(file);
-            return wrapper.getTransactions();
+
+            List<Transaction> transactions = wrapper.getTransactions();
+
+            transactions.forEach(tx -> tx.setAtmId(ATM_ID));
+
+            return transactions;
         } catch (JAXBException e) {
             throw new IOException("Error parsing XML", e);
         }

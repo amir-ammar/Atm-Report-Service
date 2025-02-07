@@ -1,43 +1,32 @@
 package com.example.AtmReportService.controller;
 
-import java.time.LocalDate;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.AtmReportService.model.TransactionResponse;
 import com.example.AtmReportService.service.TransactionService;
+import lombok.RequiredArgsConstructor;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestParam;
-
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/reports")
 @EnableCaching
+@RequiredArgsConstructor
 public class AtmReportController {
 
     private final TransactionService transactionService;
 
-    public AtmReportController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
-
     @GetMapping("/daily")
-    public TransactionResponse getDailyTransactions(@RequestParam String date) {
-        LocalDate localDate = LocalDate.parse(date);
-        return transactionService.getTransactionsForDate(localDate);
+    public TransactionResponse getDailySummary(@RequestParam String date) {
+        return transactionService.getDailySummary(TransactionService.parseDate(date));
     }
 
     @GetMapping("/daily/atm")
-    public TransactionResponse getTransactionsForAtm(@RequestParam String date, @RequestParam String atmId) {
-        LocalDate localDate = LocalDate.parse(date);
-        return transactionService.getTransactionsForAtm(localDate, atmId);
+    public TransactionResponse getAtmSummary(@RequestParam String date, @RequestParam String atmId) {
+        return transactionService.getAtmSummary(TransactionService.parseDate(date), atmId);
     }
 
     @GetMapping("/daily/type")
-    public TransactionResponse getTransactionsForType(@RequestParam String date, @RequestParam String type) {
-        LocalDate localDate = LocalDate.parse(date);
-        return transactionService.getTransactionsForType(localDate, type);
+    public TransactionResponse getTypeSummary(@RequestParam String date, @RequestParam String type) {
+        return transactionService.getTypeSummary(TransactionService.parseDate(date), type);
     }
+
 }

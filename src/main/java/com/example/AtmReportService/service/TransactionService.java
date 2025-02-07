@@ -1,10 +1,10 @@
 package com.example.AtmReportService.service;
 
-import com.example.AtmReportService.model.Transaction;
 import com.example.AtmReportService.model.TransactionResponse;
+import com.example.AtmReportService.model.TransactionSummary;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.util.List;
+import java.time.format.DateTimeParseException;
 
 @Service
 public class TransactionService {
@@ -14,22 +14,27 @@ public class TransactionService {
         this.transactionStore = transactionStore;
     }
 
-    public TransactionResponse getTransactionsForDate(LocalDate date) {
-        List<Transaction> transactions = transactionStore.getTransactionsForDate(date);
-        return new TransactionResponse(transactions.size(), calculateTotalAmount(transactions), transactions);
+    public TransactionResponse getDailySummary(LocalDate date) {
+        return toResponse(transactionStore.getDailySummary(date));
     }
 
-    public TransactionResponse getTransactionsForAtm(LocalDate date, String atmId) {
-        List<Transaction> transactions = transactionStore.getTransactionsForAtm(date, atmId);
-        return new TransactionResponse(transactions.size(), calculateTotalAmount(transactions), transactions);
+    public TransactionResponse getAtmSummary(LocalDate date, String atmId) {
+        return toResponse(transactionStore.getAtmSummary(date, atmId));
     }
 
-    public TransactionResponse getTransactionsForType(LocalDate date, String type) {
-        List<Transaction> transactions = transactionStore.getTransactionsForType(date, type);
-        return new TransactionResponse(transactions.size(), calculateTotalAmount(transactions), transactions);
+    public TransactionResponse getTypeSummary(LocalDate date, String type) {
+        return toResponse(transactionStore.getTypeSummary(date, type));
     }
 
-    private double calculateTotalAmount(List<Transaction> transactions) {
-        return transactions.stream().mapToDouble(Transaction::getAmount).sum();
+    private TransactionResponse toResponse(TransactionSummary summary) {
+        return new TransactionResponse(summary.getTotalTransactions(), summary.getTotalAmount());
+    }
+
+    public static LocalDate parseDate(String date) {
+        try {
+            return LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date format. Expected format: YYYY-MM-DD");
+        }
     }
 }
