@@ -10,7 +10,6 @@ This ATM Report Service is designed to process transaction data from different A
 
 ## Technology Stack
 
-- **Java 17** (or the version you're using)
 - **Spring Boot** (for building the service)
 - **Spring Web** (for creating REST endpoints)
 - **ExecutorService** (for concurrent transaction file processing)
